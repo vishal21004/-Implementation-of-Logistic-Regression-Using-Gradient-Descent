@@ -9,11 +9,14 @@ To write a program to implement the the Logistic Regression Using Gradient Desce
 
 ## Algorithm
 ```
-1.Import the necessary python packages
-2.Read the dataset.
-3.Define X and Y array.
-4.Define a function for costFunction,cost and gradient.
-5.Define a function to plot the decision boundary and predict the Regression value
+1. Start the program.
+2. Data preprocessing:
+3. Cleanse data,handle missing values,encode categorical variables.
+4. Model Training:Fit logistic regression model on preprocessed data.
+5. Model Evaluation:Assess model performance using metrics like accuracyprecisioon,recall.
+6. Prediction: Predict placement status for new student data using trained model.
+7. End the program.
+
 ```
 ## Program:
 ```
