@@ -1,5 +1,5 @@
-# EX 06 : Implementation-of-Logistic-Regression-Using-Gradient-Descent
-### Date : 16/09/24
+# Implementation-of-Logistic-Regression-Using-Gradient-Descent
+
 ## AIM:
 To write a program to implement the the Logistic Regression Using Gradient Descent.
 
@@ -9,75 +9,98 @@ To write a program to implement the the Logistic Regression Using Gradient Desce
 
 ## Algorithm
 ```
-1. Start the program.
-2. Data preprocessing:
-3. Cleanse data,handle missing values,encode categorical variables.
-4. Model Training:Fit logistic regression model on preprocessed data.
-5. Model Evaluation:Assess model performance using metrics like accuracyprecisioon,recall.
-6. Prediction: Predict placement status for new student data using trained model.
-7. End the program.
-
+1.Load the dataset and select ssc_p as the input feature and status as the target. Convert Placed to 1 and Not Placed to 0.
+2.Normalize the input data and initialize the weights and bias to zero.
+3.Calculate predictions using the sigmoid function and update the weights and bias using Gradient Descent for the specified number of iterations.
+4.Predict the classes using a 0.5 threshold and calculate the model's accuracy by comparing predicted and actual values.
 ```
+
 ## Program:
 ```
 /*
 Program to implement the the Logistic Regression Using Gradient Descent.
-Developed by: VISHAL M.A
-RegisterNumber:  212222230177
-*/
-import pandas as pd
-import numpy as np
-data=pd.read_csv("/content/Placement_Data (1).csv")
-data.head()
-data1=data.copy()
-data1.head()
-data1=data.drop(['sl_no','salary'],axis=1)
-data1
-from sklearn.preprocessing import LabelEncoder
-le=LabelEncoder()
-data1["gender"]=le.fit_transform(data1["gender"])
-data1["ssc_b"]=le.fit_transform(data1["ssc_b"])
-data1["hsc_b"]=le.fit_transform(data1["hsc_b"])
-data1["hsc_s"]=le.fit_transform(data1["hsc_s"])
-data1["degree_t"]=le.fit_transform(data1["degree_t"])
-data1["workex"]=le.fit_transform(data1["workex"])
-data1["specialisation"]=le.fit_transform(data1["specialisation"])
-data1["status"]=le.fit_transform(data1["status"])
-X=data1.iloc[:,: -1]
-Y=data1["status"]
-theta=np.random.randn(X.shape[1])
-y=Y
-def sigmoid(z):
-  return 1/(1+np.exp(-z))
-def loss(theta,X,y):
-  h=sigmoid(X.dot(theta))
-  return -np.sum(y*np.log(h)+ (1-y) * np.log(1-h))
-def gradient_descent(theta,X,y,alpha,num_iterations):
-  m=len(y)
-  for i in range(num_iterations):
-    h=sigmoid(X.dot(theta))
-    gradient=X.T.dot(h-y)/m
-    theta-=alpha*gradient
-  return theta
-theta=gradient_descent(theta,X,y,alpha=0.01,num_iterations=1000)
-def predict(theta,X):
-  h=sigmoid(X.dot(theta))
-  y_pred=np.where(h>=0.5 , 1,0)
-  return y_pred
-y_pred=predict(theta,X)
-accuracy=np.mean(y_pred.flatten()==y)
-print("Accuracy:",accuracy)
-print("Predicted:\n",y_pred)
-print("Actual:\n",y.values)
 
-xnew=np.array([[0,87,0,95,0,2,78,2,0,0,1,0]])
-y_prednew=predict(theta,xnew)
-print("Predicted Result:",y_prednew)
+*/
+```
 ```
 
+import pandas as pd
+import numpy as np
+
+# Load dataset
+data = pd.read_csv("Placement_Data (2).csv")
+
+# Display first 5 rows
+print(data.head())
+
+# Select input and output
+X = data[['ssc_p']].values
+y = (data['status'] == 'Placed').astype(int).values
+
+# Normalize the input
+X = (X - X.mean()) / X.std()
+
+# Sigmoid function
+def sigmoid(z):
+    return 1 / (1 + np.exp(-z))
+
+# Logistic Regression using Gradient Descent
+def logistic_regression(X, y, learning_rate=0.1, iterations=1000):
+
+    # Initialize weights and bias
+    weights = np.zeros(X.shape[1])
+    bias = 0
+
+    # Gradient Descent
+    for i in range(iterations):
+
+        # Linear equation
+        z = np.dot(X, weights) + bias
+
+        # Prediction
+        y_pred = sigmoid(z)
+
+        # Calculate gradients
+        dw = np.dot(X.T, (y_pred - y)) / len(y)
+        db = np.sum(y_pred - y) / len(y)
+
+        # Update weights and bias
+        weights = weights - learning_rate * dw
+        bias = bias - learning_rate * db
+
+    return weights, bias
+
+
+# Train the model
+weights, bias = logistic_regression(X, y)
+
+# Calculate probabilities
+probabilities = sigmoid(np.dot(X, weights) + bias)
+
+# Convert probabilities into classes
+predictions = (probabilities >= 0.5).astype(int)
+
+# Display results
+print("\nWeights:", weights)
+print("Bias:", bias)
+
+print("\nFirst 10 Predicted Classes:")
+print(predictions[:10])
+
+print("\nFirst 10 Actual Classes:")
+print(y[:10])
+
+# Calculate accuracy
+accuracy = np.mean(predictions == y)
+
+print("\nAccuracy:", accuracy * 100, "%")
+```
+
+
 ## Output:
-![ex 6 out1](https://github.com/user-attachments/assets/7ef814cc-57d8-47b8-b853-4775746150ad)
-![ex 6 out2](https://github.com/user-attachments/assets/18419897-af41-46fe-898b-214c475e6e6b)
+<img width="782" height="522" alt="image" src="https://github.com/user-attachments/assets/4f5cafa4-73a3-49ad-963e-b490af529daa" />
+
+
 
 
 
